@@ -264,6 +264,13 @@ export default function ClimateRiskDashboard() {
   const [tab, setTab] = useState("map");
   const [tick, setTick] = useState(0);
   const tickRef = useRef(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
 
   // Fetch real climate data on mount
   useEffect(() => {
@@ -329,7 +336,7 @@ export default function ClimateRiskDashboard() {
   const headerTime = new Date().toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: font.body, position: "relative", overflow: "hidden" }}>
+    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: font.body, position: "relative", overflowX: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(1.5)} }
@@ -339,6 +346,7 @@ export default function ClimateRiskDashboard() {
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: ${C.bg}; } ::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 2px; }
+        .leaflet-container { z-index: 1; }
       `}</style>
 
       {/* Dot grid background */}
@@ -347,25 +355,25 @@ export default function ClimateRiskDashboard() {
         backgroundSize: "28px 28px", opacity: 0.6 }} />
 
       {/* ── HEADER ── */}
-      <div style={{ borderBottom: `1px solid ${C.border}`, padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: C.surface }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: `radial-gradient(circle, ${C.accent}40, ${C.accent}10)`, border: `1.5px solid ${C.accent}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🌍</div>
+      <div style={{ borderBottom: `1px solid ${C.border}`, padding: isMobile ? "10px 16px" : "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: C.surface }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 32, height: 32, borderRadius: "50%", background: `radial-gradient(circle, ${C.accent}40, ${C.accent}10)`, border: `1.5px solid ${C.accent}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, flexShrink: 0 }}>🌍</div>
           <div>
-            <div style={{ fontFamily: font.display, fontSize: 14, color: C.accent, letterSpacing: 2 }}>CLIMATE RISK INTEL</div>
-            <div style={{ fontFamily: font.mono, fontSize: 9, color: C.muted, letterSpacing: 1 }}>ABUJA METROPOLITAN REGION — AI-POWERED MONITORING</div>
+            <div style={{ fontFamily: font.display, fontSize: isMobile ? 11 : 14, color: C.accent, letterSpacing: 2 }}>CLIMATE RISK INTEL</div>
+            {!isMobile && <div style={{ fontFamily: font.mono, fontSize: 9, color: C.muted, letterSpacing: 1 }}>ABUJA METROPOLITAN REGION — AI-POWERED MONITORING</div>}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 10 : 20 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.safe, animation: "blink 2s infinite" }} />
             <span style={{ fontFamily: font.mono, fontSize: 10, color: C.safe }}>LIVE</span>
           </div>
-          <div style={{ fontFamily: font.mono, fontSize: 10, color: C.muted }}>{headerTime}</div>
+          {!isMobile && <div style={{ fontFamily: font.mono, fontSize: 10, color: C.muted }}>{headerTime}</div>}
         </div>
       </div>
 
       {/* ── CURRENT CONDITIONS BAR ── */}
-      <div style={{ padding: "10px 24px", background: `${C.panel}80`, borderBottom: `1px solid ${C.border}`, display: "flex", gap: 12, flexWrap: "wrap" }}>
+      <div style={{ padding: isMobile ? "8px 16px" : "10px 24px", background: `${C.panel}80`, borderBottom: `1px solid ${C.border}`, display: "flex", gap: isMobile ? 10 : 12, flexWrap: "wrap" }}>
         {loading ? (
           <span style={{ fontFamily: font.mono, fontSize: 11, color: C.muted }}>● Connecting to Open-Meteo live feed…</span>
         ) : climate ? (
@@ -390,22 +398,22 @@ export default function ClimateRiskDashboard() {
       </div>
 
       {/* ── MAIN LAYOUT ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 0, height: "calc(100vh - 120px)", overflow: "hidden" }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 320px", gap: 0, height: isMobile ? "auto" : "calc(100vh - 120px)", overflow: isMobile ? "visible" : "hidden" }}>
 
         {/* ── LEFT PANEL ── */}
-        <div style={{ overflowY: "auto", padding: 20, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ overflowY: isMobile ? "visible" : "auto", padding: isMobile ? 12 : 20, display: "flex", flexDirection: "column", gap: 16 }}>
 
           {/* Tabs */}
           <div style={{ display: "flex", gap: 0, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 8, overflow: "hidden" }}>
             {["map", "analysis", "forecast"].map((t) => (
               <button key={t} onClick={() => setTab(t)} style={{
-                flex: 1, padding: "10px 0", fontFamily: font.mono, fontSize: 11, letterSpacing: 1,
+                flex: 1, padding: isMobile ? "10px 4px" : "10px 0", fontFamily: font.mono, fontSize: isMobile ? 10 : 11, letterSpacing: isMobile ? 0 : 1,
                 textTransform: "uppercase", border: "none", cursor: "pointer",
                 background: tab === t ? `${C.accent}15` : "transparent",
                 color: tab === t ? C.accent : C.muted,
                 borderBottom: tab === t ? `2px solid ${C.accent}` : "2px solid transparent",
                 transition: "all 0.2s",
-              }}>{t === "map" ? "🗺 Community Map" : t === "analysis" ? "🤖 AI Analysis" : "📈 Forecast"}</button>
+              }}>{t === "map" ? (isMobile ? "🗺 Map" : "🗺 Community Map") : t === "analysis" ? (isMobile ? "🤖 AI" : "🤖 AI Analysis") : (isMobile ? "📈 Fcst" : "📈 Forecast")}</button>
             ))}
           </div>
 
@@ -496,7 +504,7 @@ export default function ClimateRiskDashboard() {
                   </div>
 
                   {/* Risk breakdown */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10 }}>
                     {[
                       { label: "Flood Risk", val: analysis.floodRisk, icon: "🌊" },
                       { label: "Heat Risk", val: analysis.heatRisk, icon: "🌡" },
@@ -554,7 +562,7 @@ export default function ClimateRiskDashboard() {
                 ← COMMUNITY MAP
               </button>
               {/* Sparklines */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
                 <Sparkline data={climate.hourly.temperature_2m} color={C.warn} label="Temperature 24h (°C)" />
                 <Sparkline data={climate.hourly.precipitation} color="#4fc3f7" label="Precipitation 24h (mm)" />
                 <Sparkline data={climate.hourly.precipitation_probability} color={C.accent} label="Precip Probability %" />
@@ -615,7 +623,7 @@ export default function ClimateRiskDashboard() {
         </div>
 
         {/* ── RIGHT PANEL: ALERTS ── */}
-        <div style={{ borderLeft: `1px solid ${C.border}`, background: C.surface, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ borderLeft: isMobile ? "none" : `1px solid ${C.border}`, borderTop: isMobile ? `1px solid ${C.border}` : "none", background: C.surface, display: "flex", flexDirection: "column", overflow: "hidden", maxHeight: isMobile ? 480 : "none" }}>
           <div style={{ padding: "14px 16px", borderBottom: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ fontFamily: font.display, fontSize: 11, color: C.accent, letterSpacing: 2 }}>ALERT FEED</div>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
