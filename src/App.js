@@ -336,7 +336,7 @@ export default function ClimateRiskDashboard() {
   const headerTime = new Date().toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   return (
-    <div style={{ height: isMobile ? "auto" : "100vh", minHeight: isMobile ? "100vh" : "unset", background: C.bg, color: C.text, fontFamily: font.body, position: "relative", overflow: isMobile ? "auto" : "hidden" }}>
+    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: font.body, position: "relative", overflow: "auto" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(1.5)} }
@@ -348,7 +348,7 @@ export default function ClimateRiskDashboard() {
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: ${C.bg}; } ::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 2px; }
         .leaflet-container { z-index: 1; }
         .map-wrapper { padding-top: 65%; }
-        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: calc(100vh - 310px) !important; min-height: 280px !important; } }
+        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: clamp(320px, 50vh, 560px) !important; } }
       `}</style>
 
       {/* Dot grid background */}
@@ -400,10 +400,10 @@ export default function ClimateRiskDashboard() {
       </div>
 
       {/* ── MAIN LAYOUT ── */}
-      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 320px", gap: 0, height: isMobile ? "auto" : "calc(100vh - 120px)", overflow: isMobile ? "visible" : "hidden" }}>
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 360px", gap: 0 }}>
 
         {/* ── LEFT PANEL ── */}
-        <div style={{ overflowY: isMobile ? "visible" : "auto", padding: isMobile ? 12 : 20, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ padding: isMobile ? 12 : 20, display: "flex", flexDirection: "column", gap: 16 }}>
 
           {/* Tabs */}
           <div style={{ display: "flex", gap: 0, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 8, overflow: "hidden" }}>
@@ -422,27 +422,27 @@ export default function ClimateRiskDashboard() {
           {/* MAP TAB */}
           {tab === "map" && (
             <>
-              <div style={{ fontFamily: font.mono, fontSize: 10, color: C.muted, letterSpacing: 1 }}>
-                ● TAP A COMMUNITY NODE TO TRIGGER AI RISK ANALYSIS
+              {/* ── MAP SECTION ── */}
+              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10, padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{ fontFamily: font.mono, fontSize: 10, color: C.muted, letterSpacing: 1 }}>
+                  ● TAP A COMMUNITY NODE TO TRIGGER AI RISK ANALYSIS
+                </div>
+                <CommunityMap communities={COMMUNITIES} selected={selected} onSelect={handleSelectCommunity} analysis={analysis} />
+                <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                  {Object.entries(VULN_COLOR).map(([k, v]) => (
+                    <div key={k} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <div style={{ width: 10, height: 10, borderRadius: "50%", background: v, boxShadow: `0 0 6px ${v}` }} />
+                      <span style={{ fontFamily: font.mono, fontSize: 10, color: C.muted }}>{k}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <CommunityMap communities={COMMUNITIES} selected={selected} onSelect={handleSelectCommunity} analysis={analysis} />
 
-              {/* Legend */}
-              <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                {Object.entries(VULN_COLOR).map(([k, v]) => (
-                  <div key={k} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: v, boxShadow: `0 0 6px ${v}` }} />
-                    <span style={{ fontFamily: font.mono, fontSize: 10, color: C.muted }}>{k}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Community table */}
-              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden", display: "flex", flexDirection: "column", maxHeight: 320 }}>
-                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, fontFamily: font.display, fontSize: 11, color: C.accent, letterSpacing: 2, flexShrink: 0 }}>
+              {/* ── COMMUNITY VULNERABILITY INDEX SECTION ── */}
+              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden" }}>
+                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, fontFamily: font.display, fontSize: 11, color: C.accent, letterSpacing: 2 }}>
                   COMMUNITY VULNERABILITY INDEX
                 </div>
-                <div style={{ overflowY: "auto", flex: 1 }}>
                 {COMMUNITIES.map((c, i) => (
                   <div key={c.id} onClick={() => handleSelectCommunity(c)} style={{
                     display: "flex", alignItems: "center", padding: "10px 16px", gap: 12,
@@ -459,7 +459,6 @@ export default function ClimateRiskDashboard() {
                     <AlertBadge level={c.vuln} />
                   </div>
                 ))}
-                </div>
               </div>
             </>
           )}
@@ -627,7 +626,7 @@ export default function ClimateRiskDashboard() {
         </div>
 
         {/* ── RIGHT PANEL: ALERTS ── */}
-        <div style={{ borderLeft: isMobile ? "none" : `1px solid ${C.border}`, borderTop: isMobile ? `1px solid ${C.border}` : "none", background: C.surface, display: "flex", flexDirection: "column", overflow: "hidden", maxHeight: isMobile ? 480 : "none" }}>
+        <div style={{ borderLeft: isMobile ? "none" : `1px solid ${C.border}`, borderTop: isMobile ? `1px solid ${C.border}` : "none", background: C.surface, display: "flex", flexDirection: "column" }}>
           <div style={{ padding: "14px 16px", borderBottom: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ fontFamily: font.display, fontSize: 11, color: C.accent, letterSpacing: 2 }}>ALERT FEED</div>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -645,7 +644,7 @@ export default function ClimateRiskDashboard() {
           </div>
 
           {/* Alert feed */}
-          <div style={{ flex: 1, overflowY: "auto", padding: 12 }}>
+          <div style={{ padding: 12 }}>
             <AlertFeed alerts={liveAlerts} />
           </div>
 
