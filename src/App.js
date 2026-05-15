@@ -336,7 +336,7 @@ export default function ClimateRiskDashboard() {
   const headerTime = new Date().toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: font.body, position: "relative", overflowX: "hidden" }}>
+    <div style={{ height: isMobile ? "auto" : "100vh", minHeight: isMobile ? "100vh" : "unset", background: C.bg, color: C.text, fontFamily: font.body, position: "relative", overflow: isMobile ? "auto" : "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(1.5)} }
@@ -348,7 +348,7 @@ export default function ClimateRiskDashboard() {
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: ${C.bg}; } ::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 2px; }
         .leaflet-container { z-index: 1; }
         .map-wrapper { padding-top: 65%; }
-        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: 420px !important; } }
+        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: calc(100vh - 310px) !important; min-height: 280px !important; } }
       `}</style>
 
       {/* Dot grid background */}
