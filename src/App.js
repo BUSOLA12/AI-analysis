@@ -361,7 +361,7 @@ export default function ClimateRiskDashboard() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 32, height: 32, borderRadius: "50%", background: `radial-gradient(circle, ${C.accent}40, ${C.accent}10)`, border: `1.5px solid ${C.accent}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, flexShrink: 0 }}>🌍</div>
           <div>
-            <div style={{ fontFamily: font.display, fontSize: isMobile ? 11 : 14, color: C.accent, letterSpacing: 2 }}>CLIMATE RISK INTEL</div>
+            <div style={{ fontFamily: font.display, fontSize: isMobile ? 11 : 14, color: C.accent, letterSpacing: 2 }}>JDPCI Climate-resilient Child Health Systems Initiative (CCHSI)</div>
             {!isMobile && <div style={{ fontFamily: font.mono, fontSize: 9, color: C.muted, letterSpacing: 1 }}>ABUJA METROPOLITAN REGION — AI-POWERED MONITORING</div>}
           </div>
         </div>
