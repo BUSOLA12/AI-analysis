@@ -348,7 +348,7 @@ export default function ClimateRiskDashboard() {
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: ${C.bg}; } ::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 2px; }
         .leaflet-container { z-index: 1; }
         .map-wrapper { padding-top: 65%; }
-        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: 340px !important; } }
+        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: 420px !important; } }
       `}</style>
 
       {/* Dot grid background */}
@@ -438,10 +438,11 @@ export default function ClimateRiskDashboard() {
               </div>
 
               {/* Community table */}
-              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden" }}>
-                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, fontFamily: font.display, fontSize: 11, color: C.accent, letterSpacing: 2 }}>
+              <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden", display: "flex", flexDirection: "column", maxHeight: 320 }}>
+                <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, fontFamily: font.display, fontSize: 11, color: C.accent, letterSpacing: 2, flexShrink: 0 }}>
                   COMMUNITY VULNERABILITY INDEX
                 </div>
+                <div style={{ overflowY: "auto", flex: 1 }}>
                 {COMMUNITIES.map((c, i) => (
                   <div key={c.id} onClick={() => handleSelectCommunity(c)} style={{
                     display: "flex", alignItems: "center", padding: "10px 16px", gap: 12,
@@ -458,6 +459,7 @@ export default function ClimateRiskDashboard() {
                     <AlertBadge level={c.vuln} />
                   </div>
                 ))}
+                </div>
               </div>
             </>
           )}
