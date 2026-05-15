@@ -36,7 +36,6 @@ const COMMUNITIES = [
 ];
 
 const VULN_COLOR = { CRITICAL: C.danger, HIGH: C.warn, MEDIUM: "#ff9800", LOW: C.safe };
-const VULN_PULSE = { CRITICAL: true, HIGH: true, MEDIUM: false, LOW: false };
 
 // ─── OPEN-METEO FETCH ─────────────────────────────────────────────────────────
 async function fetchClimateData() {
@@ -305,7 +304,7 @@ export default function ClimateRiskDashboard() {
     const pick = pool[tickRef.current % pool.length];
     const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     setLiveAlerts((prev) => [{ ...pick, time: now }, ...prev.slice(0, 9)]);
-  }, [tick]);
+  }, [tick, climate]);
 
   const handleSelectCommunity = useCallback(async (c) => {
     setSelected(c);
