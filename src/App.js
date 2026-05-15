@@ -167,7 +167,7 @@ function AlertBadge({ level }) {
 function CommunityMap({ communities, selected, onSelect, analysis }) {
   const center = [9.08, 7.40];
   return (
-    <div style={{ position: "relative", width: "100%", paddingTop: "60%", border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden" }}>
+    <div className="map-wrapper" style={{ position: "relative", width: "100%", border: `1px solid ${C.border}`, borderRadius: 10, overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0 }}>
         <MapContainer center={center} zoom={12} style={{ width: "100%", height: "100%" }} scrollWheelZoom={false}>
           <TileLayer
@@ -347,6 +347,8 @@ export default function ClimateRiskDashboard() {
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: ${C.bg}; } ::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 2px; }
         .leaflet-container { z-index: 1; }
+        .map-wrapper { padding-top: 65%; }
+        @media (min-width: 768px) { .map-wrapper { padding-top: 0 !important; height: 340px !important; } }
       `}</style>
 
       {/* Dot grid background */}
